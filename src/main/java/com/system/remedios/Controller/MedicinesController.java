@@ -33,19 +33,27 @@ public class MedicinesController {
     }
 
     @PostMapping("/save")
-    @Transactional
+    @Transactional//This is the form of identification change in database
     public ResponseEntity<MedicineData> save(@RequestBody @Valid MedicinePostRequestBody registerMedicine){
         return new ResponseEntity<>(medicineService.save(registerMedicine), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteById(@PathVariable long id){
-        medicineService.deleteById(id);
-    }
-
     @PutMapping("/replace")
-    public ResponseEntity<Void> replace(@RequestBody MedicinePutRequestBody medicinePutRequestBody){
+    @Transactional
+    public ResponseEntity<Void> replace(@RequestBody @Valid MedicinePutRequestBody medicinePutRequestBody){
         medicineService.replace(medicinePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/deleteFull/{id}")
+    @Transactional
+    public void deleteFull(@PathVariable long id){
+        medicineService.deleteByIdFull(id);
+    }
+
+    @DeleteMapping("/deleteActive/{id}")
+    @Transactional
+    public void deleteActive(@PathVariable long id){
+        medicineService.deleteByIdInactive(id);
     }
 }

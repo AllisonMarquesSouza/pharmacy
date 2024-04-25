@@ -18,6 +18,7 @@ public class MedicineData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)//generate automatically
     private Long id;
 
+
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -29,6 +30,14 @@ public class MedicineData {
 
     @Enumerated(EnumType.STRING)
     private Laboratory laboratory;
+
+    private Boolean ativo;
+
+    public void inactive(){
+       this.ativo = false;
+    }
+
+
 }
 
 

@@ -20,7 +20,6 @@ public class MedicinePostRequestBody {
     @NotEmpty(message = "the name cannot be empty")
     private String name;
 
-    @NotEmpty(message = "the Via cannot be empty")
     @Enumerated
     private Via via;
 
@@ -28,11 +27,11 @@ public class MedicinePostRequestBody {
     private String lot;
     private int quantity;
 
-    @NotEmpty(message = "the LocalDate cannot be empty")
     @Future
     private LocalDate validity;
 
-    @NotEmpty(message = "the Laboratory cannot be empty")
     @Enumerated
     private Laboratory laboratory;
+
+    private Boolean ativo = true;
 }

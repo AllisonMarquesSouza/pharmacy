@@ -17,7 +17,7 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
 
     public List<MedicineData> listAll(){
-        return medicineRepository.findAll();
+        return medicineRepository.findAllByAtivoTrue();
     }
     public MedicineData findByIdOrThrowBadRequestException(long id){
         return medicineRepository.findById(id).orElseThrow(() -> new BadRequest( "Medicine not found"));
@@ -32,8 +32,12 @@ public class MedicineService {
         medicineRepository.save(medicine);
 
     }
-    public void deleteById(long id){
+    public void deleteByIdFull(long id){
          medicineRepository.delete(findByIdOrThrowBadRequestException(id));
+    }
+    public void deleteByIdInactive(long id){
+        MedicineData medicine = medicineRepository.getReferenceById(id);
+        medicine.inactive();
     }
 
 
