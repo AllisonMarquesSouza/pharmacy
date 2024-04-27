@@ -19,25 +19,34 @@ public class MedicineService {
     public List<MedicineData> listAll(){
         return medicineRepository.findAllByAtivoTrue();
     }
+
     public MedicineData findByIdOrThrowBadRequestException(long id){
         return medicineRepository.findById(id).orElseThrow(() -> new BadRequest( "Medicine not found"));
     }
+
     public MedicineData save(MedicinePostRequestBody medicinePostRequestBody){
         return medicineRepository.save(MedicineMapper.INSTANCE.toMedicine(medicinePostRequestBody));
     }
-    public void replace(MedicinePutRequestBody medicinePutRequestBody){
+
+    public MedicineData replace(MedicinePutRequestBody medicinePutRequestBody){
         MedicineData medicineSaved = findByIdOrThrowBadRequestException(medicinePutRequestBody.getId());
         MedicineData medicine = MedicineMapper.INSTANCE.toMedicine(medicinePutRequestBody);
         medicine.setId(medicineSaved.getId());
-        medicineRepository.save(medicine);
-
+        return medicineRepository.save(medicine);
     }
+
     public void deleteByIdFull(long id){
          medicineRepository.delete(findByIdOrThrowBadRequestException(id));
     }
-    public void deleteByIdInactive(long id){
+
+    public void inactive(long id){
         MedicineData medicine = medicineRepository.getReferenceById(id);
         medicine.inactive();
+    }
+
+    public void active(long id){
+        MedicineData medicine = medicineRepository.getReferenceById(id);
+        medicine.active();
     }
 
 

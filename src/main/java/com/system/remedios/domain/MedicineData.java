@@ -36,6 +36,9 @@ public class MedicineData {
     public void inactive(){
        this.ativo = false;
     }
+    public void active(){
+       this.ativo = true;
+    }
 
 
 }
