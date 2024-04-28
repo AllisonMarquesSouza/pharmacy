@@ -1,7 +1,6 @@
 package com.system.remedios.Controller;
 
 import com.system.remedios.Mapper.MedicineMapper;
-import com.system.remedios.Repository.MedicineRepository;
 import com.system.remedios.domain.MedicineData;
 import com.system.remedios.requests.MedicinePostRequestBody;
 import com.system.remedios.requests.MedicinePutRequestBody;
@@ -25,7 +24,6 @@ import java.util.List;
 //localhost:8080/remedios
 public class MedicinesController {
     private final MedicineService medicineService;
-    private final MedicineRepository medicineRepository;
 
     @GetMapping("/listAll")
     public ResponseEntity<List<MedicineData>> listAll(){
@@ -42,15 +40,9 @@ public class MedicinesController {
     public ResponseEntity<MedicineData> save(@RequestBody @Valid MedicinePostRequestBody medicinePost, UriComponentsBuilder uriBuilder){
         MedicineData mapperMedicine = MedicineMapper.INSTANCE.toMedicine(medicinePost);
 
-        MedicineData medicineData = new MedicineData(mapperMedicine.getId(),
-                mapperMedicine.getName(), mapperMedicine.getVia(),
-                mapperMedicine.getLot(), mapperMedicine.getQuantity(),
-                mapperMedicine.getValidity(), mapperMedicine.getLaboratory(),
-                mapperMedicine.getAtivo());
-        //create constructor and to send all data
+        MedicineData medicineData = new MedicineData(mapperMedicine);
 
-        medicineRepository.save(medicineData);
-        //save using the Repository directly, because the service request a MedicinePostRequestBody
+        medicineService.save(medicineData);
 
         URI uri = uriBuilder.path("/remedios/save/{id}").buildAndExpand(medicineData.getId()).toUri();
         //here create the uri where was created the Medicine, Headers in Postman (Location)

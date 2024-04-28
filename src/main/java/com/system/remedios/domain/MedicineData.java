@@ -33,6 +33,18 @@ public class MedicineData {
 
     private Boolean ativo;
 
+    //constructor with all parameters to the method save
+    public MedicineData(MedicineData medicineData){
+        this.id = medicineData.getId();
+        this.name = medicineData.getName();
+        this.via = medicineData.getVia();
+        this.lot = medicineData.getLot();
+        this.quantity = medicineData.getQuantity();
+        this.validity = medicineData.getValidity();
+        this.laboratory = medicineData.getLaboratory();
+        this.ativo = medicineData.getAtivo();
+    }
+
     public void inactive(){
        this.ativo = false;
     }
