@@ -1,11 +1,11 @@
 package com.system.remedios.Exception;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 @Data
-@SuperBuilder
+@Builder
 public class ExceptionDetails {
     private String title;
     protected int status;

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 
 //@Table(name = "Remedio") -> form to set name of table in database
 @Entity
+@Table(name = "medicine_data" , schema = "remedios_api2")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -5,14 +5,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@ControllerAdvice //All controllers have than to use what is insider of this class
-@RestControllerAdvice
+@RestControllerAdvice//all time than have an exception will come this class
 
 public class RestExceptionHandler {
 
@@ -22,7 +20,7 @@ public class RestExceptionHandler {
                 ExceptionDetails.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
-                        .title(("Not Found Exception , Check the Documentation"))
+                        .title("Not Found Exception , Check the Documentation")
                         .details("Medicine not found")
                         .developerMessage(bad.getClass().getName())
                         .build(), HttpStatus.NOT_FOUND);
@@ -33,7 +31,7 @@ public class RestExceptionHandler {
                 ExceptionDetails.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
-                        .title(("Bad Request Exception , Check the Documentation"))
+                        .title("Bad Request Exception , Check the Documentation")
                         .details("The name cannot be empty")
                         .developerMessage(notValid.getClass().getName())
                         .build(), HttpStatus.BAD_REQUEST);
