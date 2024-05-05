@@ -1,4 +1,4 @@
-package com.system.remedios.users;
+package com.system.remedios.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class Usuario implements UserDetails {
     private String username;
     private String password;
 
-    @Override //here serve to set the users than will go access api
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }

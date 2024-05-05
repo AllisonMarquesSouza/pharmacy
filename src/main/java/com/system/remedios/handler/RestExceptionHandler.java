@@ -37,5 +37,4 @@ public class RestExceptionHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
-
 }
