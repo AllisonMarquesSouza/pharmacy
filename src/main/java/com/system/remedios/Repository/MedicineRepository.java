@@ -8,4 +8,5 @@ import java.util.List;
 public interface MedicineRepository extends JpaRepository<MedicineData, Long> {
 
      List<MedicineData> findAllByAtivoTrue();
+
 }

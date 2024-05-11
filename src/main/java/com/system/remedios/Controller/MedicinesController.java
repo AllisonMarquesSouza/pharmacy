@@ -1,6 +1,5 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.Mapper.MedicineMapper;
 import com.system.remedios.domain.MedicineData;
 import com.system.remedios.requests.MedicinePostRequestBody;
 import com.system.remedios.requests.MedicinePutRequestBody;
@@ -38,22 +37,20 @@ public class MedicinesController {
     @PostMapping("/save")
     @Transactional//This is the form of identification change in database
     public ResponseEntity<MedicineData> save(@RequestBody @Valid MedicinePostRequestBody medicinePost, UriComponentsBuilder uriBuilder){
-        MedicineData mapperMedicine = MedicineMapper.INSTANCE.toMedicine(medicinePost);
 
-        MedicineData medicineData = new MedicineData(mapperMedicine);
+        MedicineData save = medicineService.save(medicinePost);
 
-        medicineService.save(medicineData);
-
-        URI uri = uriBuilder.path("/remedios/save/{id}").buildAndExpand(medicineData.getId()).toUri();
+        URI uri = uriBuilder.path("/remedios/save/{id}").buildAndExpand(save.getId()).toUri();
         //here create the uri where was created the Medicine, Headers in Postman (Location)
 
-        return ResponseEntity.created(uri).body(medicineData);
+        return ResponseEntity.created(uri).body(save);
     }
 
     @PutMapping("/replace")
     @Transactional
-    public ResponseEntity<MedicineData> replace(@RequestBody @Valid MedicinePutRequestBody medicinePutRequestBody){
-        return new ResponseEntity<>(medicineService.replace(medicinePutRequestBody), HttpStatus.OK);
+    public ResponseEntity<Void> replace(@RequestBody @Valid MedicinePutRequestBody medicinePutRequestBody){
+        medicineService.replace(medicinePutRequestBody);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/active/{id}")

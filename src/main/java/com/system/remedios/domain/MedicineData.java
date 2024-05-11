@@ -10,10 +10,11 @@ import java.time.LocalDate;
 
 //@Table(name = "Remedio") -> form to set name of table in database
 @Entity
-@Table(name = "medicine_data" , schema = "remedios_api2")
+@Table(name = "medicine_data")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MedicineData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)//generate automatically
