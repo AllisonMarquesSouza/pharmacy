@@ -46,6 +46,9 @@ class MedicinesControllerTest {
 
         BDDMockito.doNothing().when(medicineServiceMock).inactive(ArgumentMatchers.anyLong());
 
+
+        BDDMockito.doNothing().when(medicineServiceMock).deleteByIdFull(ArgumentMatchers.anyLong());
+
     }
 
     @Test
@@ -54,13 +57,12 @@ class MedicinesControllerTest {
         String expectedName = MedicineCreator.createValidMedicineData().getName();
 
         List<MedicineData> medicineResponse = medicinesController.listAll().getBody();
-        log.info(medicineResponse);
 
         Assertions.assertThat(medicineResponse).isNotNull();
 
-        Assertions.assertThat(medicineResponse.stream().toList()).isNotEmpty().hasSize(1);
+        Assertions.assertThat(medicineResponse).isNotEmpty().hasSize(1);
 
-        Assertions.assertThat(medicineResponse.stream().toList().get(0).getName()).isEqualTo(expectedName);
+        Assertions.assertThat(medicineResponse.get(0).getName()).isEqualTo(expectedName);
 
     }
     @Test
