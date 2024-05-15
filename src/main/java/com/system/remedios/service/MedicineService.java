@@ -29,7 +29,6 @@ public class MedicineService {
         MedicineData medicine = MedicineMapper.INSTANCE.toMedicine(medicinePostRequestBody);
         medicine.active();
         return medicineRepository.save(medicine);
-
     }
 
     public void replace(MedicinePutRequestBody medicinePutRequestBody){

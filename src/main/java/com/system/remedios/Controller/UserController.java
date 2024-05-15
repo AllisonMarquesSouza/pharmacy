@@ -1,9 +1,9 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.domain.MedicineData;
-import com.system.remedios.requests.MedicinePostRequestBody;
-import com.system.remedios.requests.MedicinePutRequestBody;
-import com.system.remedios.service.MedicineService;
+import com.system.remedios.domain.Usuario;
+import com.system.remedios.requests.UserPostRequestBody;
+import com.system.remedios.requests.UserPutRequestBody;
+import com.system.remedios.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -15,45 +15,62 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/remedios")
+@RequestMapping("/user")
 @Log4j2
 @RequiredArgsConstructor
 @Tag(name = "open-api")
-//localhost:8080/remedios
-public class MedicinesController {
-    private final MedicineService medicineService;
+public class UserController {
+    private final UserService userService;
 
-    @Operation(summary =  "List all medicines", method = "GET",
-            description ="List all medicines",
-            tags = {"Medicine"},
+    @Operation(summary =  "List all users", method = "POST",
+            description ="List all users",
+            tags = {"User"},
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "200",content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = MedicineData.class),
+                            schema = @Schema(implementation = Usuario.class),
                             examples = @ExampleObject())),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),})
     @GetMapping("/listAll")
-    public ResponseEntity<List<MedicineData>> listAll(){
-        return ResponseEntity.ok(medicineService.listAll());
+    public ResponseEntity<List<Usuario>> listAll(){
+        return ResponseEntity.ok(userService.listAll());
     }
 
-    @Operation(summary = "Search the medicine for id",
-            description ="Search for details of medicine for id",
-            tags = {"Medicine"},
+    @Operation(summary = "Search the user for username",
+            description ="Search for details of user for username",
+            tags = {"User"},
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "200",content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = MedicineData.class),
+                            schema = @Schema(implementation = Usuario.class),
+                            examples = @ExampleObject())),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),})
+    @GetMapping("/findByUsername/{username}")
+    @Transactional
+    public ResponseEntity<UserDetails> findByUsername(@PathVariable String username){
+        return ResponseEntity.ok(userService.findByUsername(username));
+    }
+
+    @Operation(summary = "Search the user for id",
+            description ="Search for details of user for id",
+            tags = {"User"},
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "200",content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Usuario.class),
                             examples = @ExampleObject())),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
@@ -61,38 +78,31 @@ public class MedicinesController {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),})
     @GetMapping("/findById/{id}")
-    public ResponseEntity<MedicineData> findById(@PathVariable long id){
-        return ResponseEntity.ok(medicineService.findByIdOrThrowBadRequestException(id));
+    @Transactional
+    public ResponseEntity<UserDetails> findById(@PathVariable long id){
+        return ResponseEntity.ok(userService.findById(id));
     }
 
-
-
-    @Operation(summary = "Register a medicine",
-            description ="Register a medicine",
-            tags = {"Medicine"},
+    @Operation(summary = "Create login to user",
+            description ="Create login to user",
+            tags = {"User"},
             responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "200",content = @Content(
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content(
                             mediaType = "application/json")),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),
             })
-    @PostMapping("/save")
+    @PostMapping("/createUser")
     @Transactional
-    public ResponseEntity<MedicineData> save(@RequestBody @Valid MedicinePostRequestBody medicinePost, UriComponentsBuilder uriBuilder){
-
-        MedicineData save = medicineService.save(medicinePost);
-
-        URI uri = uriBuilder.path("/remedios/save/{id}").buildAndExpand(save.getId()).toUri();
-
-
-        return ResponseEntity.created(uri).body(save);
+    public ResponseEntity<Usuario> makeRegister(@RequestBody @Valid UserPostRequestBody userPostRequestBody){
+        return new ResponseEntity<>(userService.makeRegister(userPostRequestBody), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Replace the data of medicine",
-            description ="Update the register of medicines",
-            tags = {"Medicine"},
+    @Operation(summary = "Replace the data of user",
+            description ="Replace the data of user",
+            tags = {"User"},
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content(
                             mediaType = "application/json")),
@@ -103,49 +113,14 @@ public class MedicinesController {
             })
     @PutMapping("/replace")
     @Transactional
-    public ResponseEntity<Void> replace(@RequestBody @Valid MedicinePutRequestBody medicinePutRequestBody){
-        medicineService.replace(medicinePutRequestBody);
+    public ResponseEntity<Void> replace(@RequestBody @Valid UserPutRequestBody userPutRequestBody){
+        userService.replace(userPutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-    @Operation(summary = "Activate the register of the medicine",
-            description ="Activate the register of the medicine",
-            tags = {"Medicine"},
-            responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),
-            })
-    @PutMapping("/active/{id}")
-    @Transactional
-    public ResponseEntity<Void> active(@PathVariable long id){
-        medicineService.active(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Operation(summary = "Disable the register of the medicine",
-            description ="Disable the register of the medicine",
-            tags = {"Medicine"},
-            responses = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),
-            })
-    @DeleteMapping("/inactive/{id}")
-    @Transactional
-    public ResponseEntity<Void> inactive(@PathVariable long id){
-        medicineService.inactive(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @Operation(summary = "Remove the medicine ",
-            description ="Remove the medicine",
-            tags = {"Medicine"},
+    @Operation(summary = "Remove the user ",
+            description ="Remove the user",
+            tags = {"User"},
             responses = {
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "204",content = @Content),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
@@ -156,7 +131,8 @@ public class MedicinesController {
     @DeleteMapping("/delete/{id}")
     @Transactional
     public ResponseEntity<Void> deleteFull(@PathVariable long id){
-        medicineService.deleteByIdFull(id);
+        userService.deleteRegister(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

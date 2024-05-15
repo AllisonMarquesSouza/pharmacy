@@ -1,9 +1,12 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.config.DataAuthentication;
-import com.system.remedios.service.TokenService;
+import com.system.remedios.requests.DataAuthentication;
 import com.system.remedios.domain.Usuario;
+import com.system.remedios.service.TokenService;
+import com.system.remedios.service.UserService;
 import com.system.remedios.tokenDto.DataTokenJwt;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private final UserService userService;
 
+    @Operation(summary = "Doing login of user",
+            description ="Doing login of user",
+            tags = {"Login"},
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "200",content = @Content(
+                            mediaType = "application/json")),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "400",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "401",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "404",content = @Content),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse( responseCode = "500",content = @Content),
+            })
     @PostMapping
-    public ResponseEntity<DataTokenJwt> makeLogin(@RequestBody @Valid DataAuthentication data){
+    public ResponseEntity<DataTokenJwt> doLogin(@RequestBody @Valid DataAuthentication data){
         UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(data.username(), data.password());
 
         Authentication authenticate = authenticationManager.authenticate(login);

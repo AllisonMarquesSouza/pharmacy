@@ -2,6 +2,7 @@ package com.system.remedios.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,8 +13,9 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Entity(name = "usuarios")
+@Entity
 @Table(name = "Usuario")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode

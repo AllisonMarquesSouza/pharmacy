@@ -21,10 +21,11 @@ public class RestExceptionHandler {
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND.value())
                         .title("Not Found Exception , Check the Documentation")
-                        .details("Medicine not found")
+                        .details("Not found, check the data and documentation")
                         .developerMessage(bad.getClass().getName())
                         .build(), HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public static ResponseEntity<ExceptionDetails> handlerMethodArgumentNotValidException(MethodArgumentNotValidException notValid) {
         return new ResponseEntity<>(

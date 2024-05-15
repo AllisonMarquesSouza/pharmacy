@@ -1,4 +1,4 @@
-package com.system.remedios.config;
+package com.system.remedios.requests;
 
 public record DataAuthentication(String username, String password){
 }
