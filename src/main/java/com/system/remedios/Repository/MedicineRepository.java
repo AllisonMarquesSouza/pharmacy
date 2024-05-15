@@ -9,4 +9,5 @@ public interface MedicineRepository extends JpaRepository<MedicineData, Long> {
 
      List<MedicineData> findAllByAtivoTrue();
 
+
 }

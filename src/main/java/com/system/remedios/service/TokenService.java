@@ -13,14 +13,14 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
-    @Value("api.security.token.secret=${JWT_SECRET:123456}") //form of identify the variable in properties
+    @Value("${api.security.token.secret}")
     private String secret;
 
     public String generateToken(Usuario usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return  JWT.create()
-                    .withIssuer("Medicine_api")//creator
+                    .withIssuer("Medicine_api")
                     .withSubject(usuario.getUsername())
                     .withExpiresAt(dateExpiration())
                     .sign(algorithm);
@@ -43,6 +43,6 @@ public class TokenService {
     }
 
     public Instant dateExpiration (){
-        return  LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00")); //zone in Brazil -03:00
+        return  LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }

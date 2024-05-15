@@ -1,6 +1,6 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.security.DataAuthentication;
+import com.system.remedios.config.DataAuthentication;
 import com.system.remedios.service.TokenService;
 import com.system.remedios.domain.Usuario;
 import com.system.remedios.tokenDto.DataTokenJwt;
@@ -28,7 +28,7 @@ public class AuthenticationController {
 
         Authentication authenticate = authenticationManager.authenticate(login);
 
-        String tokenJwt = tokenService.generateToken((Usuario) authenticate.getPrincipal());//cast of Usuario
+        String tokenJwt = tokenService.generateToken((Usuario) authenticate.getPrincipal());
 
         return ResponseEntity.ok(new DataTokenJwt(tokenJwt));
     }

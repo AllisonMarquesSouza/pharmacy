@@ -1,4 +1,4 @@
-package com.system.remedios.security;
+package com.system.remedios.config;
 
 import com.system.remedios.Repository.UserRepository;
 import com.system.remedios.service.TokenService;
@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class SecurityFilter extends OncePerRequestFilter{ //go to pull once filter each request
+public class SecurityFilter extends OncePerRequestFilter{
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
@@ -30,14 +30,13 @@ public class SecurityFilter extends OncePerRequestFilter{ //go to pull once filt
         if(tokenJWT != null){
             String subject = tokenService.getSubject(tokenJWT);
 
-            UserDetails user = userRepository.findByUsername(subject); //find for the username, if there is one
+            UserDetails user = userRepository.findByUsername(subject);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            //see if the username is authenticated and get authorities
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            //authenticating the user in spring security and free the access
+
 
         }
         filterChain.doFilter(request, response);

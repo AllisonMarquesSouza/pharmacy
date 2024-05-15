@@ -5,6 +5,7 @@ import com.system.remedios.Repository.MedicineRepository;
 import com.system.remedios.domain.MedicineData;
 import com.system.remedios.requests.MedicinePostRequestBody;
 import com.system.remedios.requests.MedicinePutRequestBody;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class MedicineService {
     }
 
     public MedicineData findByIdOrThrowBadRequestException(long id){
-        return medicineRepository.getReferenceById(id);
+        return medicineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     public MedicineData save(MedicinePostRequestBody medicinePostRequestBody){

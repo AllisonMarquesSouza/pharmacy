@@ -1,4 +1,4 @@
-package com.system.remedios.security;
+package com.system.remedios.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,9 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->request.requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .anyRequest().authenticated())
-                //permit the all people to access the post with /login address and other requisition need be authenticated
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                //configure the filter because the spring have one different , but check the documentation to more details
                 .build();
     }
 
@@ -43,6 +42,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
     }
 
 }

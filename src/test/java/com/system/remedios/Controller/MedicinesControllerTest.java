@@ -21,7 +21,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
-//@SpringBootTest -> it turn on application and execute the tests, but not recommended because is so slow
 @Log4j2
 class MedicinesControllerTest {
     @InjectMocks

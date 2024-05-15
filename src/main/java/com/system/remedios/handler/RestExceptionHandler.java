@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice//all time than have an exception will come this class
+@RestControllerAdvice
 
 public class RestExceptionHandler {
 

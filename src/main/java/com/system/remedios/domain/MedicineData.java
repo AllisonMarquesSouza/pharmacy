@@ -8,7 +8,6 @@ import lombok.*;
 import java.time.LocalDate;
 
 
-//@Table(name = "Remedio") -> form to set name of table in database
 @Entity
 @Table(name = "medicine_data")
 @Data
@@ -17,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 public class MedicineData {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)//generate automatically
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
@@ -35,7 +34,7 @@ public class MedicineData {
 
     private Boolean ativo;
 
-    //constructor with all parameters to the method save
+
     public MedicineData(MedicineData medicineData){
         this.id = medicineData.getId();
         this.name = medicineData.getName();
