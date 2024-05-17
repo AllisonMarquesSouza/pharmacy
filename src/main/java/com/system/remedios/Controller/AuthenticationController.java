@@ -1,9 +1,8 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.requests.DataAuthentication;
 import com.system.remedios.domain.Usuario;
+import com.system.remedios.requests.DataAuthentication;
 import com.system.remedios.service.TokenService;
-import com.system.remedios.service.UserService;
 import com.system.remedios.tokenDto.DataTokenJwt;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
-    private final UserService userService;
+
 
     @Operation(summary = "Doing login of user",
             description ="Doing login of user",

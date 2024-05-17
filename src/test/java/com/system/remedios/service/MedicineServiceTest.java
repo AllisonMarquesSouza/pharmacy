@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @Log4j2
@@ -31,8 +32,8 @@ class MedicineServiceTest {
         BDDMockito.when(medicineRepositoryMock.findAllByAtivoTrue())
                 .thenReturn(List.of(MedicineCreator.createValidMedicineData()));
 
-        BDDMockito.when(medicineRepositoryMock.getReferenceById(ArgumentMatchers.anyLong()))
-                .thenReturn(MedicineCreator.createMedicineDataToBeSaved());
+        BDDMockito.when(medicineRepositoryMock.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.ofNullable(MedicineCreator.createMedicineDataToBeSaved()));
 
         BDDMockito.when(medicineRepositoryMock.save(ArgumentMatchers.any(MedicineData.class)))
                 .thenReturn(MedicineCreator.createMedicineDataToBeSaved());
@@ -80,6 +81,8 @@ class MedicineServiceTest {
 
         Assertions.assertThat(save).isNotNull();
         Assertions.assertThat(save).isEqualTo(expectedMedicine);
+
+
 
     }
 

@@ -43,7 +43,7 @@ public class UserService {
         userRepository.save(user);
 
     }
-    public Usuario makeRegister(UserPostRequestBody userPost) {
+    public Usuario save(UserPostRequestBody userPost) {
         Usuario user = UserMapper.INSTANCE.toUsuario(userPost);
         String encryptedPassword = PasswordCryptService.encryptPassword(user.getPassword());
         user.setPassword(encryptedPassword);

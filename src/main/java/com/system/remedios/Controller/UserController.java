@@ -97,7 +97,7 @@ public class UserController {
     @PostMapping("/createUser")
     @Transactional
     public ResponseEntity<Usuario> makeRegister(@RequestBody @Valid UserPostRequestBody userPostRequestBody){
-        return new ResponseEntity<>(userService.makeRegister(userPostRequestBody), HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.save(userPostRequestBody), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Replace the data of user",
