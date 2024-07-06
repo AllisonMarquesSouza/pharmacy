@@ -1,40 +1,37 @@
-To access the Swagger documentation of the API, follow these steps:
-
-Download the project.
-Run it in an IDE of your choice.
-Open your browser and navigate to the following URL:
-The API is fully documented via Swagger.
-
+Baixe o projeto.
+Execute-o em uma IDE de sua escolha.
+Abra seu navegador e navegue para a seguinte URL:
 http://localhost:8080/swagger-ui/index.html
+A API está totalmente documentada via Swagger.
 
-API Security
-The API is protected by Spring Security (JWT token). Here are the steps to gain access:
+Segurança da API
+A API é protegida pelo Spring Security (token JWT). Aqui estão os passos para obter acesso:
 
-User Registration: Register a user in the database (you can do this via Postman or Swagger).
-Login: With the registered user, perform a login.
-Token Retrieval: Retrieve the token returned upon login.
-Authorize Swagger: Use the token to authorize Swagger. Once authorized, all methods will be accessible.
+Registro de Usuário: Registre um usuário no banco de dados (você pode fazer isso via Postman ou Swagger).
+Login: Com o usuário registrado, faça o login.
+Obtenção do Token: Recupere o token retornado após o login.
+Autorizar Swagger: Use o token para autorizar o Swagger. Uma vez autorizado, todos os métodos estarão acessíveis.
+Sobre a API:
 
-About the API:
-- This REST API is designed for managing medications in a hospital pharmacy. It supports the following functionalities:
+Esta API REST foi projetada para gerenciar medicamentos em uma farmácia hospitalar. Ela suporta as seguintes funcionalidades:
 
-- Register Medications: Add new medications to the system.
+- Registrar Medicamentos: Adicionar novos medicamentos ao sistema.
 
-- Register System Users: Add new users to the system.
+- Registrar Usuários do Sistema: Adicionar novos usuários ao sistema.
 
-- Manage Medication Quantities: Add or remove quantities of medications.
+- Gerenciar Quantidades de Medicamentos: Adicionar ou remover quantidades de medicamentos.
 
-- Deletion: Perform direct deletion or logical deletion based on business rules.
+- Deleção: Realizar deleção direta ou deleção lógica baseada em regras de negócios.
 
-- Security Control: Requests are allowed only after logging in and including the token for authentication.
+- Controle de Segurança: As requisições são permitidas apenas após o login e inclusão do token para autenticação.
 
-Password Encryption: Passwords are encrypted using Bcrypt to ensure the security of the institution and its functions.
+- Criptografia de Senha: As senhas são criptografadas usando Bcrypt para garantir a segurança da instituição e suas funções.
 
-Technologies Used:
+Tecnologias Utilizadas:
 
 - Java
 - Spring Boot
-- JWT Token
+- Token JWT
 - MySQL
 - Swagger
 - Spring Security
