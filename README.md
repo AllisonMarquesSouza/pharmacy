@@ -34,3 +34,8 @@ Technologies Used:
 - Swagger
 - Spring Security
 - Bcrypt
+
+Endpoints : 
+
+![Captura de tela 2024-08-10 202406](https://github.com/user-attachments/assets/ba348651-4e13-42ff-8817-fe6236598705)
+
