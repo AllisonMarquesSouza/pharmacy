@@ -1,13 +1,12 @@
 package com.system.remedios.Repository;
 
-import com.system.remedios.domain.MedicineData;
+import com.system.remedios.domain.Medicine;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface MedicineRepository extends JpaRepository<MedicineData, Long> {
-
-     List<MedicineData> findAllByAtivoTrue();
-
-
+@Repository
+public interface MedicineRepository extends JpaRepository<Medicine, Long> {
+     List<Medicine> findAllByAtivoTrue();
 }

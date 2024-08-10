@@ -1,8 +1,8 @@
 package com.system.remedios.service;
 
 import com.system.remedios.Repository.MedicineRepository;
-import com.system.remedios.domain.MedicineData;
-import com.system.remedios.requests.MedicinePostRequestCreator;
+import com.system.remedios.domain.Medicine;
+import com.system.remedios.dtos.MedicinePostRequestCreator;
 import com.system.remedios.util.MedicineCreator;
 import lombok.extern.log4j.Log4j2;
 import org.assertj.core.api.Assertions;
@@ -35,7 +35,7 @@ class MedicineServiceTest {
         BDDMockito.when(medicineRepositoryMock.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.ofNullable(MedicineCreator.createMedicineDataToBeSaved()));
 
-        BDDMockito.when(medicineRepositoryMock.save(ArgumentMatchers.any(MedicineData.class)))
+        BDDMockito.when(medicineRepositoryMock.save(ArgumentMatchers.any(Medicine.class)))
                 .thenReturn(MedicineCreator.createMedicineDataToBeSaved());
 
 
@@ -47,15 +47,15 @@ class MedicineServiceTest {
     @Test
     @DisplayName("ListAll returns MedicineDate when is successful")
     void list_ReturnsListOfMedicineDataActive_WhenSuccessful() {
-        MedicineData validMedicineData = MedicineCreator.createValidMedicineData();
+        Medicine validMedicine = MedicineCreator.createValidMedicineData();
 
-        List<MedicineData> medicineResponse = medicineService.listAll();
+        List<Medicine> medicineResponse = medicineService.listAll();
 
         Assertions.assertThat(medicineResponse).isNotNull();
 
         Assertions.assertThat(medicineResponse).isNotEmpty().hasSize(1);
 
-        Assertions.assertThat(medicineResponse.stream().toList().get(0).getName()).isEqualTo(validMedicineData.getName());
+        Assertions.assertThat(medicineResponse.stream().toList().get(0).getName()).isEqualTo(validMedicine.getName());
 
     }
     @Test
@@ -64,7 +64,7 @@ class MedicineServiceTest {
         Long expectedId = MedicineCreator.createMedicineDataToBeSaved().getId();
 
 
-        MedicineData byId = medicineService.findByIdOrThrowBadRequestException(1);
+        Medicine byId = medicineService.findByIdOrThrowBadRequestException(1);
 
 
         Assertions.assertThat(byId).isNotNull();
@@ -76,8 +76,8 @@ class MedicineServiceTest {
     @Test
     @DisplayName("Save MedicineDate return when is successful")
     void SaveMedicineDate_ReturnWhenSuccessful() {
-        MedicineData expectedMedicine = MedicineCreator.createMedicineDataToBeSaved();
-        MedicineData save = medicineService.save(MedicinePostRequestCreator.medicinePostRequestBody());
+        Medicine expectedMedicine = MedicineCreator.createMedicineDataToBeSaved();
+        Medicine save = medicineService.save(MedicinePostRequestCreator.medicinePostRequestBody());
 
         Assertions.assertThat(save).isNotNull();
         Assertions.assertThat(save).isEqualTo(expectedMedicine);

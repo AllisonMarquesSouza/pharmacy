@@ -1,10 +1,9 @@
 package com.system.remedios.service;
 
-import com.system.remedios.Mapper.MedicineMapper;
 import com.system.remedios.Repository.MedicineRepository;
-import com.system.remedios.domain.MedicineData;
-import com.system.remedios.requests.MedicinePostRequestBody;
-import com.system.remedios.requests.MedicinePutRequestBody;
+import com.system.remedios.domain.Medicine;
+import com.system.remedios.dtos.MedicineDtoPost;
+import com.system.remedios.dtos.MedicineDtoPut;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,23 +16,23 @@ public class MedicineService {
     private final MedicineRepository medicineRepository;
 
 
-    public List<MedicineData> listAll(){
+    public List<Medicine> listAll(){
         return medicineRepository.findAllByAtivoTrue();
     }
 
-    public MedicineData findByIdOrThrowBadRequestException(long id){
-        return medicineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    public Medicine findByIdOrThrowBadRequestException(long id){
+        return medicineRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medicine not found"));
     }
 
-    public MedicineData save(MedicinePostRequestBody medicinePostRequestBody){
-        MedicineData medicine = MedicineMapper.INSTANCE.toMedicine(medicinePostRequestBody);
-        medicine.active();
+    public Medicine save(MedicineDtoPost medicineDtoPost){
+        Medicine medicine = new Medicine(medicineDtoPost);
+        medicine.setAtivo(true);
         return medicineRepository.save(medicine);
     }
 
-    public void replace(MedicinePutRequestBody medicinePutRequestBody){
-        MedicineData medicineSaved = findByIdOrThrowBadRequestException(medicinePutRequestBody.getId());
-        MedicineData medicine = MedicineMapper.INSTANCE.toMedicine(medicinePutRequestBody);
+    public void replace(MedicineDtoPut medicineDtoPut){
+        Medicine medicineSaved = findByIdOrThrowBadRequestException(medicineDtoPut.getId());
+        Medicine medicine = new Medicine(medicineDtoPut);
         medicine.setId(medicineSaved.getId());
         medicineRepository.save(medicine);
     }
@@ -43,15 +42,16 @@ public class MedicineService {
     }
 
     public void inactive(long id){
-        MedicineData medicine = medicineRepository.getReferenceById(id);
-        medicine.inactive();
+        Medicine medicine = this.findByIdOrThrowBadRequestException(id);
+        medicine.setAtivo(false);
+        medicineRepository.save(medicine);
 
     }
 
     public void active(long id){
-        MedicineData medicine = medicineRepository.getReferenceById(id);
-        medicine.active();
-
+        Medicine medicine = this.findByIdOrThrowBadRequestException(id);
+        medicine.setAtivo(true);
+        medicineRepository.save(medicine);
     }
 
 
