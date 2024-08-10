@@ -1,10 +1,10 @@
 package com.system.remedios.Controller;
 
-import com.system.remedios.domain.MedicineData;
-import com.system.remedios.requests.MedicinePostRequestBody;
-import com.system.remedios.requests.MedicinePostRequestCreator;
-import com.system.remedios.requests.MedicinePutRequestBody;
-import com.system.remedios.requests.MedicinePutRequestCreator;
+import com.system.remedios.domain.Medicine;
+import com.system.remedios.dtos.MedicineDtoPost;
+import com.system.remedios.dtos.MedicinePostRequestCreator;
+import com.system.remedios.dtos.MedicineDtoPut;
+import com.system.remedios.dtos.MedicinePutRequestCreator;
 import com.system.remedios.service.MedicineService;
 import com.system.remedios.util.MedicineCreator;
 import lombok.extern.log4j.Log4j2;
@@ -36,10 +36,10 @@ class MedicinesControllerTest {
         BDDMockito.when(medicineServiceMock.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong()))
                 .thenReturn(MedicineCreator.createMedicineDataToBeSaved());
 
-        BDDMockito.when(medicineServiceMock.save(ArgumentMatchers.any(MedicinePostRequestBody.class)))
+        BDDMockito.when(medicineServiceMock.save(ArgumentMatchers.any(MedicineDtoPost.class)))
                 .thenReturn(MedicineCreator.createMedicineDataToBeSaved());
 
-        BDDMockito.doNothing().when(medicineServiceMock).replace(ArgumentMatchers.any(MedicinePutRequestBody.class));
+        BDDMockito.doNothing().when(medicineServiceMock).replace(ArgumentMatchers.any(MedicineDtoPut.class));
 
         BDDMockito.doNothing().when(medicineServiceMock).active(ArgumentMatchers.anyLong());
 
@@ -55,7 +55,7 @@ class MedicinesControllerTest {
     void list_ReturnsListOfMedicineDataActive_WhenSuccessful() {
         String expectedName = MedicineCreator.createValidMedicineData().getName();
 
-        List<MedicineData> medicineResponse = medicinesController.listAll().getBody();
+        List<Medicine> medicineResponse = medicinesController.listAll().getBody();
 
         Assertions.assertThat(medicineResponse).isNotNull();
 
@@ -69,7 +69,7 @@ class MedicinesControllerTest {
     void findById_ReturnMedicineDate_WhenSuccessful() {
         Long expectedId = MedicineCreator.createMedicineDataToBeSaved().getId();
 
-        MedicineData medicineResponse = medicinesController.findById(1L).getBody();
+        Medicine medicineResponse = medicinesController.findById(1L).getBody();
 
         Assertions.assertThat(medicineResponse).isNotNull();
 
@@ -82,8 +82,8 @@ class MedicinesControllerTest {
     @Test
     @DisplayName("Save MedicineDate return when is successful")
     void SaveMedicineDate_ReturnWhenSuccessful() {
-        MedicineData expectedMedicine = MedicineCreator.createMedicineDataToBeSaved();
-        MedicineData save = medicineServiceMock.save(MedicinePostRequestCreator.medicinePostRequestBody());
+        Medicine expectedMedicine = MedicineCreator.createMedicineDataToBeSaved();
+        Medicine save = medicineServiceMock.save(MedicinePostRequestCreator.medicinePostRequestBody());
 
         Assertions.assertThat(save).isNotNull();
         Assertions.assertThat(save).isEqualTo(expectedMedicine);
@@ -132,12 +132,12 @@ class MedicinesControllerTest {
     @Test
     @DisplayName("DeleteById MedicineDate when is successful")
     void deleteById_WhenSuccessful() {
-        ResponseEntity<Void> delete = medicinesController.deleteFull(1);
+        ResponseEntity<Void> delete = medicinesController.deleteFull(1L);
 
         Assertions.assertThat(delete).isNotNull();
         Assertions.assertThat((delete.getStatusCode())).isEqualTo(HttpStatus.NO_CONTENT);
 
-        Assertions.assertThatCode(() -> medicinesController.deleteFull(1))
+        Assertions.assertThatCode(() -> medicinesController.deleteFull(1L))
                 .doesNotThrowAnyException();
 
     }
