@@ -30,6 +30,7 @@ Technologies Used:
 - Spring Boot
 - JWT Token
 - MySQL
+- Flyway (manage database tables)
 - Swagger
 - Spring Security
 - Bcrypt
