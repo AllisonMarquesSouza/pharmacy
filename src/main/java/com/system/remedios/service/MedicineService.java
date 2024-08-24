@@ -20,7 +20,7 @@ public class MedicineService {
         return medicineRepository.findAllByAtivoTrue();
     }
 
-    public Medicine findByIdOrThrowBadRequestException(long id){
+    public Medicine findByIdOrThrowBadRequestException(Long id){
         return medicineRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Medicine not found"));
     }
 
@@ -37,19 +37,20 @@ public class MedicineService {
         medicineRepository.save(medicine);
     }
 
-    public void deleteByIdFull(long id){
+    public void deleteByIdFull(Long id){
+        this.findByIdOrThrowBadRequestException(id);
         medicineRepository.deleteById(id);
     }
 
-    public void inactive(long id){
-        Medicine medicine = this.findByIdOrThrowBadRequestException(id);
+    public void inactive(Long id){
+        Medicine medicine = findByIdOrThrowBadRequestException(id);
         medicine.setAtivo(false);
         medicineRepository.save(medicine);
 
     }
 
-    public void active(long id){
-        Medicine medicine = this.findByIdOrThrowBadRequestException(id);
+    public void active(Long id){
+        Medicine medicine = findByIdOrThrowBadRequestException(id);
         medicine.setAtivo(true);
         medicineRepository.save(medicine);
     }
