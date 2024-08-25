@@ -6,7 +6,6 @@ import com.system.remedios.Repository.MedicineRepository;
 import com.system.remedios.domain.Medicine;
 import com.system.remedios.dtos.MedicineDtoPost;
 import com.system.remedios.dtos.MedicineDtoPut;
-import com.system.remedios.util.MedicineCreator;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,37 +33,37 @@ class MedicineServiceTest {
     @Mock
     private MedicineRepository medicineRepositoryMock;
 
+    private Medicine existingMedicine;
+
     @BeforeEach
     void setUp() {
+        existingMedicine = new Medicine(1L, "Buscopam", Via.ORAL, 100,
+                LocalDate.now().plusDays(10), Laboratory.MEDLEY, true);
 
     }
 
     @Test
     @DisplayName("ListAll returns MedicineDate when is successful")
     void list_ReturnsListOfMedicineDataActive_WhenSuccessful() {
-        Medicine validMedicine = MedicineCreator.createValidMedicineData();
-
         Mockito.when(medicineRepositoryMock.findAllByAtivoTrue())
-                .thenReturn(List.of(validMedicine));
+                .thenReturn(List.of(existingMedicine));
 
         List<Medicine> medicineResponse = medicineService.listAll();
 
         assertNotNull(medicineResponse);
         assertEquals(medicineResponse.size(), 1);
-        assertEquals(medicineResponse.get(0), validMedicine);
+        assertEquals(medicineResponse.get(0), existingMedicine);
     }
     @Test
     @DisplayName("findByIdOrThrowBadRequestException return MedicineDate when is successful")
     void findById_ReturnMedicineDate_WhenSuccessful() {
-        Medicine expectedMedicine = MedicineCreator.createValidMedicineData();
-
         Mockito.when(medicineRepositoryMock.findById(2L))
-                .thenReturn(Optional.ofNullable(expectedMedicine));
+                .thenReturn(Optional.ofNullable(existingMedicine));
 
         Medicine medicineByID = medicineService.findByIdOrThrowBadRequestException(2L);
 
         assertNotNull(medicineByID);
-        assertEquals(medicineByID, expectedMedicine);
+        assertEquals(medicineByID, existingMedicine);
     }
 
     @Test
@@ -82,36 +81,32 @@ class MedicineServiceTest {
     @Test
     @DisplayName("Save MedicineDate return when is successful")
     void SaveMedicineDate_ReturnWhenSuccessful() {
-        Medicine expectedMedicine = MedicineCreator.createMedicineDataToBeSaved();
-
         Mockito.when(medicineRepositoryMock.save(ArgumentMatchers.any(Medicine.class)))
-                .thenReturn(expectedMedicine);
+                .thenReturn(existingMedicine);
 
         Medicine medicineSaved = medicineService.save(MedicineDtoPost.builder().build());
 
         assertNotNull(medicineSaved);
-        assertEquals(medicineSaved, expectedMedicine);
+        assertEquals(medicineSaved, existingMedicine);
     }
     @Test
     @DisplayName("Should update Medicine when is successful")
     void updateMedicineWhenSuccessful() {
-        Medicine existingMedicine = MedicineCreator.createValidMedicineData();
-
-        Medicine updatedMedicine = new Medicine(2L, "new-medicine", Via.ORAL, 10,
+        Medicine updatedMedicine = new Medicine(1L, "new-medicine", Via.ORAL, 10,
                 LocalDate.of(2025, 1, 1), Laboratory.MEDLEY, true);
 
-        Mockito.when(medicineRepositoryMock.findById(2L))
+        Mockito.when(medicineRepositoryMock.findById(1L))
                 .thenReturn(Optional.of(existingMedicine));
 
         Mockito.when(medicineRepositoryMock.save(Mockito.any(Medicine.class))).thenReturn(updatedMedicine);
 
-        MedicineDtoPut medicineDtoPut = new MedicineDtoPut(2L, "new-medicine", Via.ORAL, 10,
+        MedicineDtoPut medicineDtoPut = new MedicineDtoPut(1L, "new-medicine", Via.ORAL, 10,
                 LocalDate.of(2025, 1, 1), Laboratory.MEDLEY, true);
 
         assertDoesNotThrow(() -> medicineService.replace(medicineDtoPut));
 
         Mockito.verify(medicineRepositoryMock).save(Mockito.argThat(m ->
-                m.getId().equals(2L) &&
+                m.getId().equals(1L) &&
                         m.getName().equals("new-medicine") &&
                         m.getQuantity() == 10 &&
                         m.getValidity().equals(LocalDate.of(2025, 1, 1)) &&
@@ -123,10 +118,8 @@ class MedicineServiceTest {
     @Test
     @DisplayName("DeleteById MedicineDate when is successful")
     void deleteById_WhenSuccessful() {
-        Medicine expectedMedicine = MedicineCreator.createValidMedicineData();
-
         Mockito.when(medicineRepositoryMock.findById(2L))
-                .thenReturn(Optional.ofNullable(expectedMedicine));
+                .thenReturn(Optional.ofNullable(existingMedicine));
 
         assertDoesNotThrow(() -> medicineService.deleteByIdFull(2L));
         verify(medicineRepositoryMock).deleteById(2L);
