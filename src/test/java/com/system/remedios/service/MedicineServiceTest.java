@@ -43,7 +43,7 @@ class MedicineServiceTest {
     }
 
     @Test
-    @DisplayName("ListAll returns MedicineDate when is successful")
+    @DisplayName("Should listAll Medicine when is successful")
     void list_ReturnsListOfMedicineDataActive_WhenSuccessful() {
         Mockito.when(medicineRepositoryMock.findAllByAtivoTrue())
                 .thenReturn(List.of(existingMedicine));
@@ -55,7 +55,7 @@ class MedicineServiceTest {
         assertEquals(medicineResponse.get(0), existingMedicine);
     }
     @Test
-    @DisplayName("findByIdOrThrowBadRequestException return MedicineDate when is successful")
+    @DisplayName("Should findById the Medicine when is successful")
     void findById_ReturnMedicineDate_WhenSuccessful() {
         Mockito.when(medicineRepositoryMock.findById(2L))
                 .thenReturn(Optional.ofNullable(existingMedicine));
@@ -67,7 +67,7 @@ class MedicineServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw EntityNotFoundException when find Medicine by id")
+    @DisplayName("Should throw EntityNotFoundException when not found Medicine by id")
     void findByIdCaseErrorMedicineNotFound() {
         Mockito.when(medicineRepositoryMock.findById(2L))
                 .thenThrow(new EntityNotFoundException("Medicine Not found"));
@@ -79,7 +79,7 @@ class MedicineServiceTest {
     }
 
     @Test
-    @DisplayName("Save MedicineDate return when is successful")
+    @DisplayName("Should save Medicine when is successful")
     void SaveMedicineDate_ReturnWhenSuccessful() {
         Mockito.when(medicineRepositoryMock.save(ArgumentMatchers.any(Medicine.class)))
                 .thenReturn(existingMedicine);
@@ -116,7 +116,7 @@ class MedicineServiceTest {
     }
 
     @Test
-    @DisplayName("DeleteById MedicineDate when is successful")
+    @DisplayName("Should delete by ID Medicine when is successful")
     void deleteById_WhenSuccessful() {
         Mockito.when(medicineRepositoryMock.findById(2L))
                 .thenReturn(Optional.ofNullable(existingMedicine));
